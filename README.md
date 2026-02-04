@@ -13,3 +13,9 @@ The project uses 6 datasets to benchmark the agent
 | [Test_L3_R2](http://blog.gamesolver.org/data/Test_L3_R2) | End-Medium | moves <= 14 | 14 <= remaining < 28 |
 | [Test_L3_R3](http://blog.gamesolver.org/data/Test_L3_R3) | End-Hard | moves <= 14 | 28 <= remaining |
 
+## Run benchmark
+
+negamax with array board with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result.csv --timeout 10 -- ./target/release/project --board array --solver negamax
+```

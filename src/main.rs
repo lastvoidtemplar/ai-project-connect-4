@@ -53,7 +53,7 @@ fn run<P: Position, S:Solver>(position: &mut P, solver: &mut S) -> Metric{
     let start = std::time::Instant::now();
     let score = solver.solve(position);
     let explored_nodes = solver.explored_nodes();
-    let time_in_microseconds = start.elapsed().as_millis() as usize;
+    let time_in_microseconds = start.elapsed().as_micros() as usize;
     Metric { score, explored_nodes, time_in_microseconds }
 }
 
