@@ -114,7 +114,7 @@ async def main():
 
 if __name__ == "__main__":
     if sys.platform != "win32":
-        watcher = asyncio.SafeChildWatcher()
+        watcher = asyncio.FastChildWatcher()
         asyncio.set_child_watcher(watcher)
 
     asyncio.run(main())

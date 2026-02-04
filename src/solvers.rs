@@ -8,5 +8,6 @@ pub trait Solver {
     fn explored_nodes(&self) -> usize;
 }
 
+pub mod center_columns_solver;
 pub mod alpha_beta_solver;
 pub mod negamax_solver;
