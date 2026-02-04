@@ -1,0 +1,15 @@
+# Connect 4 Agent
+
+## Datasets
+
+The project uses 6 datasets to benchmark the agent
+
+| Dataset ID(1000 cases) | Dataset name |Starting position length(number of already played moves) | Solution Depth(number of remaining moves) |
+| :--- | :--- | :--- | :--- |
+| [Test_L1_R1](http://blog.gamesolver.org/data/Test_L3_R1) | End-Easy | 28 < moves | remaining < 14 |
+| [Test_L2_R1](http://blog.gamesolver.org/data/Test_L2_R1) | Middle-Easy | 	14 < moves <= 28 | remaining < 14 |
+| [Test_L2_R2](http://blog.gamesolver.org/data/Test_L2_R2) | Middle-Medium | 14 < moves <= 28 | 14 <= remaining < 28 |
+| [Test_L3_R1](http://blog.gamesolver.org/data/Test_L3_R1) | End-Easy | moves <= 14 | remaining < 14 |
+| [Test_L3_R2](http://blog.gamesolver.org/data/Test_L3_R2) | End-Medium | moves <= 14 | 14 <= remaining < 28 |
+| [Test_L3_R3](http://blog.gamesolver.org/data/Test_L3_R3) | End-Hard | moves <= 14 | 28 <= remaining |
+
