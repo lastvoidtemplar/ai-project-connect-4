@@ -113,4 +113,8 @@ async def main():
     print(f"\nDone! Results saved to {args.out}")
 
 if __name__ == "__main__":
+    if sys.platform != "win32":
+        watcher = asyncio.SafeChildWatcher()
+        asyncio.set_child_watcher(watcher)
+
     asyncio.run(main())

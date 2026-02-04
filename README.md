@@ -19,3 +19,8 @@ negamax with array board with 10 seconds for each case
 ```bash
 python3 scripts/benchmark/benchmark.py --dir ./data --out result.csv --timeout 10 -- ./target/release/project --board array --solver negamax
 ```
+
+alpha beta pruning negamax with array board with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result.csv --timeout 10 -- ./target/release/project --board array --solver strong-alpha-beta
+```

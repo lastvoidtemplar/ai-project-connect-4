@@ -1,6 +1,6 @@
 use std::{cmp::max, i32};
 
-use crate::{positions::{HEIGHT, WIDTH}, solvers::Solver};
+use crate::{positions::{HEIGHT, Position, WIDTH}, solvers::Solver};
 
 pub struct NegamaxSolver {
     explored_nodes: usize
@@ -11,7 +11,7 @@ impl NegamaxSolver {
         Self { explored_nodes: 0 }
     }
 
-     fn negamax<P: crate::positions::Position >(&mut self, position: &mut P) -> i32 {
+     fn negamax(&mut self, position: &mut Box<dyn Position>) -> i32 {
         self.explored_nodes+=1;
         if position.played_moves() == WIDTH * HEIGHT {
             return 0;
@@ -37,7 +37,7 @@ impl NegamaxSolver {
 }
 
 impl Solver for NegamaxSolver {
-    fn solve<P: crate::positions::Position>(&mut self, position: &mut P) -> i32 {
+    fn solve(&mut self, position: &mut Box<dyn Position>) -> i32 {
         self.explored_nodes = 0;
         self.negamax(position)
     }

@@ -9,7 +9,7 @@ pub trait Position {
     fn played_moves(&self) -> usize;
 }
 
-pub fn load_starting_position<P: Position>(encoded_position: &str, position: &mut P){
+pub fn load_starting_position(encoded_position: &str, position: &mut Box<dyn Position>){
     for ch in encoded_position.as_bytes() {
         let colm = (ch - '1' as u8) as usize;
         if colm >= WIDTH || !position.can_play(colm) || position.is_winning(colm) {
