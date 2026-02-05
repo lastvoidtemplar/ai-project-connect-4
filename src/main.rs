@@ -1,10 +1,9 @@
 use std::i32;
 
 use crate::{
-    positions::{array_position::ArrayPosition, load_starting_position},
+    positions::{array_position::ArrayPosition, bit_position::BitPosition, load_starting_position},
     solvers::{
-        MAX_SCORE, MIN_SCORE, Solver, alpha_beta_solver::AlphaBetaSolver,
-        center_columns_solver::CenterColumnsSolver, negamax_solver::NegamaxSolver,
+        MAX_SCORE, MIN_SCORE, Solver, alpha_beta_solver::AlphaBetaSolver, bitboard_solver::BitBoardSolver, center_columns_solver::CenterColumnsSolver, negamax_solver::NegamaxSolver
     },
 };
 
@@ -27,6 +26,8 @@ fn select_board_and_solver(encoded_position: &str) -> Box<dyn Solver> {
 
     let mut array_position = ArrayPosition::new();
     load_starting_position(encoded_position, &mut array_position);
+    let mut bit_position = BitPosition::new();
+    load_starting_position(encoded_position, &mut bit_position);
 
     let solver: Box<dyn Solver> = match solver_arg.as_deref() {
         Some("negamax") => Box::new(NegamaxSolver::new(array_position)),
@@ -34,6 +35,8 @@ fn select_board_and_solver(encoded_position: &str) -> Box<dyn Solver> {
         Some("strong-alpha-beta") => Box::new(AlphaBetaSolver::new(array_position,MIN_SCORE, MAX_SCORE)),
         Some("weak-center-columns") => Box::new(CenterColumnsSolver::new(array_position,-1, 1)),
         Some("strong-center-columns") => Box::new(CenterColumnsSolver::new(array_position, MIN_SCORE, MAX_SCORE)),
+        Some("weak-bitboard") => Box::new(BitBoardSolver::new(bit_position,-1, 1)),
+        Some("strong-bitboard") => Box::new(BitBoardSolver::new(bit_position, MIN_SCORE, MAX_SCORE)),
         Some(other) => panic!("Unknown solver: {}", other),
         None => panic!("Missing --solver argument"),
     };

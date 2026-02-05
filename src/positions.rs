@@ -4,9 +4,7 @@ pub const HEIGHT: usize = 6;
 pub trait Position {
     fn can_play(&self, colm:usize) -> bool;
     fn play(&mut self, colm:usize);
-    fn reverse_play(&mut self, colm:usize);
     fn is_winning(&self, colm:usize) -> bool;
-    fn played_moves(&self) -> usize;
 }
 
 pub fn load_starting_position<P: Position>(encoded_position: &str, position: &mut P){
@@ -19,4 +17,5 @@ pub fn load_starting_position<P: Position>(encoded_position: &str, position: &mu
     }
 }
 
+pub mod bit_position;
 pub mod array_position;

@@ -15,11 +15,20 @@ impl ArrayPosition {
             played_moves: 0,
         }
     }
+    
+    pub fn reverse_play(&mut self, colm: usize) {
+        self.played_moves -= 1;
+        self.columns_heights[colm] -= 1;
+        self.board[colm][self.columns_heights[colm]] -= self.current_player();
+    }
 
     fn current_player(&self) -> i32 {
         (1 + (self.played_moves & 1)) as i32
     }
-
+    
+    pub fn played_moves(&self) -> usize {
+        self.played_moves
+    }
 }
 
 impl Position for ArrayPosition {
@@ -33,11 +42,6 @@ impl Position for ArrayPosition {
         self.played_moves += 1;
     }
 
-    fn reverse_play(&mut self, colm: usize) {
-        self.played_moves -= 1;
-        self.columns_heights[colm] -= 1;
-        self.board[colm][self.columns_heights[colm]] -= self.current_player();
-    }
 
     fn is_winning(&self, colm: usize) -> bool {
         let current_player = self.current_player();
@@ -76,7 +80,5 @@ impl Position for ArrayPosition {
         return false;
     }
 
-    fn played_moves(&self) -> usize {
-        self.played_moves
-    }
+
 }

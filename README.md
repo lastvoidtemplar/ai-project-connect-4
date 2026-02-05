@@ -15,12 +15,37 @@ The project uses 6 datasets to benchmark the agent
 
 ## Run benchmark
 
-negamax with array board with 10 seconds for each case
+strong solver - negamax with array board with 10 seconds for each case
 ```bash
-python3 scripts/benchmark/benchmark.py --dir ./data --out result.csv --timeout 10 -- ./target/release/project --board array --solver negamax
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_negamax.csv --timeout 10 -- ./target/release/project --solver negamax
 ```
 
-alpha beta pruning negamax with array board with 10 seconds for each case
+weak solver - alpha beta pruning negamax with array board with 10 seconds for each case
 ```bash
-python3 scripts/benchmark/benchmark.py --dir ./data --out result.csv --timeout 10 -- ./target/release/project --board array --solver strong-alpha-beta
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_weak_alpha_beta.csv --timeout 10 -- ./target/release/project --solver weak-alpha-beta
+```
+
+strong solver - alpha beta pruning negamax with array board with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_strong_alpha_beta.csv --timeout 10 -- ./target/release/project --solver strong-alpha-beta
+```
+
+weak solver - alpha beta pruning negamax with array board and center columns heuristic with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_weak_center_columns.csv --timeout 10 -- ./target/release/project --solver weak-center-columns
+```
+
+strong solver - alpha beta pruning negamax with array board and center columns heuristicwith 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_strong_center_columns.csv --timeout 10 -- ./target/release/project --solver strong-center-columns
+```
+
+weak solver - alpha beta pruning negamax with bitboard and center columns heuristic with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_weak_bitboard.csv --timeout 10 -- ./target/release/project --solver weak-bitboard
+```
+
+strong solver - alpha beta pruning negamax with bitboard and center columns heuristicwith 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_strong_bitboard.csv --timeout 10 -- ./target/release/project --solver strong-bitboard
 ```
