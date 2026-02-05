@@ -1,26 +1,23 @@
 use std::i32;
 
 use crate::{
-    positions::{Position, array_position::ArrayPosition},
+    positions::{array_position::ArrayPosition, load_starting_position},
     solvers::{
-        MAX_SCORE, MIN_SCORE, Solver, alpha_beta_solver::AlphaBetaSolver, center_columns_solver::CenterColumnsSolver, negamax_solver::NegamaxSolver
+        MAX_SCORE, MIN_SCORE, Solver, alpha_beta_solver::AlphaBetaSolver,
+        center_columns_solver::CenterColumnsSolver, negamax_solver::NegamaxSolver,
     },
 };
 
 mod positions;
 mod solvers;
 
-fn select_board_and_solver() -> (Box<dyn Position>, Box<dyn Solver>) {
-    let mut board_arg: Option<String> = None;
+fn select_board_and_solver(encoded_position: &str) -> Box<dyn Solver> {
     let mut solver_arg: Option<String> = None;
 
     let mut args = std::env::args().skip(1); // skip binary name
 
     while let Some(arg) = args.next() {
         match arg.as_str() {
-            "--board" => {
-                board_arg = args.next();
-            }
             "--solver" => {
                 solver_arg = args.next();
             }
@@ -28,23 +25,20 @@ fn select_board_and_solver() -> (Box<dyn Position>, Box<dyn Solver>) {
         }
     }
 
-    let position: Box<dyn Position> = match board_arg.as_deref() {
-        Some("array") => Box::new(ArrayPosition::new()),
-        Some(other) => panic!("Unknown board: {}", other),
-        None => panic!("Missing --board argument"),
-    };
+    let mut array_position = ArrayPosition::new();
+    load_starting_position(encoded_position, &mut array_position);
 
     let solver: Box<dyn Solver> = match solver_arg.as_deref() {
-        Some("negamax") => Box::new(NegamaxSolver::new()),
-        Some("weak-alpha-beta") => Box::new(AlphaBetaSolver::new(-1, 1)),
-        Some("strong-alpha-beta") => Box::new(AlphaBetaSolver::new(MIN_SCORE, MAX_SCORE)),
-        Some("weak-center-columns") => Box::new(CenterColumnsSolver::new(-1, 1)),
-        Some("strong-center-columns") => Box::new(CenterColumnsSolver::new(MIN_SCORE, MAX_SCORE)),
+        Some("negamax") => Box::new(NegamaxSolver::new(array_position)),
+        Some("weak-alpha-beta") => Box::new(AlphaBetaSolver::new(array_position,-1, 1)),
+        Some("strong-alpha-beta") => Box::new(AlphaBetaSolver::new(array_position,MIN_SCORE, MAX_SCORE)),
+        Some("weak-center-columns") => Box::new(CenterColumnsSolver::new(array_position,-1, 1)),
+        Some("strong-center-columns") => Box::new(CenterColumnsSolver::new(array_position, MIN_SCORE, MAX_SCORE)),
         Some(other) => panic!("Unknown solver: {}", other),
         None => panic!("Missing --solver argument"),
     };
 
-    (position, solver)
+    solver
 }
 
 fn read_encoded_position() -> String {
@@ -61,9 +55,9 @@ struct Metric {
     time_in_microseconds: usize,
 }
 
-fn run(position: &mut Box<dyn Position>, solver: &mut Box<dyn Solver>) -> Metric {
+fn run(solver: &mut Box<dyn Solver>) -> Metric {
     let start = std::time::Instant::now();
-    let score = solver.solve(position);
+    let score = solver.solve();
     let explored_nodes = solver.explored_nodes();
     let time_in_microseconds = start.elapsed().as_micros() as usize;
     Metric {
@@ -81,9 +75,8 @@ fn print_metric(metric: &Metric) {
 }
 
 fn main() {
-    let (mut position, mut solver) = select_board_and_solver();
     let encoded_position = read_encoded_position();
-    positions::load_starting_position(&encoded_position, &mut position);
-    let metric = run(&mut position, &mut solver);
+    let mut solver = select_board_and_solver(&encoded_position);
+    let metric = run(&mut solver);
     print_metric(&metric);
 }

@@ -1,10 +1,10 @@
-use crate::positions::{HEIGHT, Position, WIDTH};
+use crate::positions::{HEIGHT, WIDTH};
 
 pub const MIN_SCORE: i32 = -(WIDTH as i32 * HEIGHT as i32) / 2;
 pub const MAX_SCORE: i32 = (WIDTH as i32 * HEIGHT as i32) / 2;
 
 pub trait Solver {
-    fn solve(&mut self, position: &mut Box<dyn Position>) -> i32;
+    fn solve(&mut self) -> i32;
     fn explored_nodes(&self) -> usize;
 }
 
