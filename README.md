@@ -49,3 +49,13 @@ strong solver - alpha beta pruning negamax with bitboard and center columns heur
 ```bash
 python3 scripts/benchmark/benchmark.py --dir ./data --out result_strong_bitboard.csv --timeout 10 -- ./target/release/project --solver strong-bitboard
 ```
+
+weak solver - alpha beta pruning negamax with bitboard and center columns heuristic and transposition table with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_weak_transposition_table.csv --timeout 10 -- ./target/release/project --solver weak-transposition-table
+```
+
+strong solver - alpha beta pruning negamax with bitboard and center columns heuristic and transposition table with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_strong_transposition_table.csv --timeout 10 -- ./target/release/project --solver strong-transposition-table
+```

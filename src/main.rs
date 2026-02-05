@@ -3,7 +3,7 @@ use std::i32;
 use crate::{
     positions::{array_position::ArrayPosition, bit_position::BitPosition, load_starting_position},
     solvers::{
-        MAX_SCORE, MIN_SCORE, Solver, alpha_beta_solver::AlphaBetaSolver, bitboard_solver::BitBoardSolver, center_columns_solver::CenterColumnsSolver, negamax_solver::NegamaxSolver, transposition_table_solver::TranspositionTableSolver
+        MAX_SCORE, MIN_SCORE, Solver, alpha_beta_solver::AlphaBetaSolver, bitboard_solver::BitBoardSolver, center_columns_solver::CenterColumnsSolver, iterative_deepening_solver::IterativeDeepeningSolver, negamax_solver::NegamaxSolver, transposition_table_solver::TranspositionTableSolver
     }, transposition_table::TranspositionTable,
 };
 
@@ -44,6 +44,8 @@ fn select_board_and_solver(encoded_position: &str) -> Box<dyn Solver> {
         Some("strong-bitboard") => Box::new(BitBoardSolver::new(bit_position, MIN_SCORE, MAX_SCORE)),
         Some("weak-transposition-table") => Box::new(TranspositionTableSolver::new(bit_position,-1, 1, table)),
         Some("strong-transposition-table") => Box::new(TranspositionTableSolver::new(bit_position, MIN_SCORE, MAX_SCORE, table)),
+        Some("weak-iterative-deepening") => Box::new(IterativeDeepeningSolver::new(bit_position,-1, 1, table)),
+        Some("strong-iterative-deepening") => Box::new(IterativeDeepeningSolver::new(bit_position, MIN_SCORE, MAX_SCORE, table)),
         Some(other) => panic!("Unknown solver: {}", other),
         None => panic!("Missing --solver argument"),
     };
