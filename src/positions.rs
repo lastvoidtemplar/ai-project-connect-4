@@ -17,5 +17,6 @@ pub fn load_starting_position<P: Position>(encoded_position: &str, position: &mu
     }
 }
 
+pub mod advance_bit_position;
 pub mod bit_position;
 pub mod array_position;

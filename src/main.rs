@@ -1,9 +1,9 @@
 use std::i32;
 
 use crate::{
-    positions::{array_position::ArrayPosition, bit_position::BitPosition, load_starting_position},
+    positions::{advance_bit_position::AdvanceBitPosition, array_position::ArrayPosition, bit_position::BitPosition, load_starting_position},
     solvers::{
-        MAX_SCORE, MIN_SCORE, Solver, alpha_beta_solver::AlphaBetaSolver, bitboard_solver::BitBoardSolver, center_columns_solver::CenterColumnsSolver, iterative_deepening_solver::IterativeDeepeningSolver, negamax_solver::NegamaxSolver, transposition_table_solver::TranspositionTableSolver
+        MAX_SCORE, MIN_SCORE, Solver, alpha_beta_solver::AlphaBetaSolver, avoid_losing_moves_solver::AvoidLosingMovesSolver, bitboard_solver::BitBoardSolver, center_columns_solver::CenterColumnsSolver, iterative_deepening_solver::IterativeDeepeningSolver, negamax_solver::NegamaxSolver, transposition_table_solver::TranspositionTableSolver
     }, transposition_table::TranspositionTable,
 };
 
@@ -33,6 +33,8 @@ fn select_board_and_solver(encoded_position: &str) -> Box<dyn Solver> {
     load_starting_position(encoded_position, &mut array_position);
     let mut bit_position = BitPosition::new();
     load_starting_position(encoded_position, &mut bit_position);
+    let mut advance_bit_position = AdvanceBitPosition::new();
+    load_starting_position(encoded_position, &mut advance_bit_position);
 
     let solver: Box<dyn Solver> = match solver_arg.as_deref() {
         Some("negamax") => Box::new(NegamaxSolver::new(array_position)),
@@ -46,6 +48,8 @@ fn select_board_and_solver(encoded_position: &str) -> Box<dyn Solver> {
         Some("strong-transposition-table") => Box::new(TranspositionTableSolver::new(bit_position, MIN_SCORE, MAX_SCORE, table)),
         Some("weak-iterative-deepening") => Box::new(IterativeDeepeningSolver::new(bit_position,-1, 1, table)),
         Some("strong-iterative-deepening") => Box::new(IterativeDeepeningSolver::new(bit_position, MIN_SCORE, MAX_SCORE, table)),
+        Some("weak-avoid-losing-moves") => Box::new(AvoidLosingMovesSolver::new(advance_bit_position,-1, 1, table)),
+        Some("strong-avoid-losing-moves") => Box::new(AvoidLosingMovesSolver::new(advance_bit_position, MIN_SCORE, MAX_SCORE, table)),
         Some(other) => panic!("Unknown solver: {}", other),
         None => panic!("Missing --solver argument"),
     };
