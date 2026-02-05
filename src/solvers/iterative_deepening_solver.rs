@@ -82,7 +82,7 @@ impl Solver for IterativeDeepeningSolver {
         let mut right = self.beta;
 
         while left < right {
-            let mut median = (left + right) / 2;
+            let mut median = left + (right - left) / 2;
             if median <= 0  &&  left/2 < median {
                 median = left / 2;
             } else if median >= 0 && median < right / 2 {

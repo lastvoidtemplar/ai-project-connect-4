@@ -1,15 +1,16 @@
 use std::{cmp::max, i32};
 
 use crate::{
+    move_sorter::MoveSorter,
     positions::{
-        HEIGHT, Position, WIDTH,
+        HEIGHT, WIDTH,
         advance_bit_position::{AdvanceBitPosition, column_mask},
     },
     solvers::{MIN_SCORE, Solver},
     transposition_table::TranspositionTable,
 };
 
-pub struct AvoidLosingMovesSolver {
+pub struct MoveScoreSolver {
     position: AdvanceBitPosition,
     alpha: i32,
     beta: i32,
@@ -18,7 +19,7 @@ pub struct AvoidLosingMovesSolver {
     column_order: [usize; WIDTH],
 }
 
-impl AvoidLosingMovesSolver {
+impl MoveScoreSolver {
     pub fn new(
         position: AdvanceBitPosition,
         alpha: i32,
@@ -76,16 +77,22 @@ impl AvoidLosingMovesSolver {
             }
         }
 
-        for ind in 0..WIDTH {
+        let mut moves = MoveSorter::new();
+        for ind in (0..WIDTH).rev() {
             let colm = self.column_order[ind];
-            if next & column_mask(colm) != 0 {
-                let old_position = self.position;
-                self.position.play(colm);
-                alpha = max(alpha, -self.negamax(-beta, -alpha));
-                self.position = old_position;
-                if alpha >= beta {
-                    return alpha;
-                }
+            let mov = next & column_mask(colm);
+            if mov != 0 {
+                moves.add(mov, self.position.score(mov));
+            }
+        }
+
+        for mov in moves {
+            let old_position = self.position;
+            self.position.play_move(mov);
+            alpha = max(alpha, -self.negamax(-beta, -alpha));
+            self.position = old_position;
+            if alpha >= beta {
+                return alpha;
             }
         }
         self.table
@@ -94,7 +101,7 @@ impl AvoidLosingMovesSolver {
     }
 }
 
-impl Solver for AvoidLosingMovesSolver {
+impl Solver for MoveScoreSolver {
     fn solve(&mut self) -> i32 {
         self.explored_nodes = 0;
 

@@ -87,6 +87,16 @@ impl AdvanceBitPosition {
         // dont play under a winning move
         possible & (!(opponent_winning >> 1))
     }
+
+    pub fn play_move(&mut self, mov: u64) {
+        self.current = self.mask ^ self.current;
+        self.mask = self.mask | mov;
+        self.played_moves+=1;
+    }
+
+    pub fn score(&self, mov: u64) -> i32 {
+        popcount(compute_winning_position(self.current | mov, self.mask))
+    }
 }
 
 impl Position for AdvanceBitPosition {
@@ -154,4 +164,13 @@ fn compute_winning_position(position: u64, mask: u64) -> u64 {
     winning |= off_dialonal_pair & (position >> (3 * off_dialonal_shift));
 
     return winning & (BOARD_MASK ^ mask);
+}
+
+fn popcount(mut mask: u64) -> i32 {
+    let mut count = 0;
+    while mask != 0{
+        mask = mask & (mask - 1);
+        count+=1;
+    }
+    count
 }

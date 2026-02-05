@@ -9,6 +9,7 @@ pub trait Solver {
     fn explored_nodes(&self) -> usize;
 }
 
+pub mod move_score_solver;
 pub mod avoid_losing_moves_solver;
 pub mod iterative_deepening_solver;
 pub mod transposition_table_solver;
