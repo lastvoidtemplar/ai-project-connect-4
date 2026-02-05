@@ -3,12 +3,15 @@ use std::i32;
 use crate::{
     positions::{array_position::ArrayPosition, bit_position::BitPosition, load_starting_position},
     solvers::{
-        MAX_SCORE, MIN_SCORE, Solver, alpha_beta_solver::AlphaBetaSolver, bitboard_solver::BitBoardSolver, center_columns_solver::CenterColumnsSolver, negamax_solver::NegamaxSolver
-    },
+        MAX_SCORE, MIN_SCORE, Solver, alpha_beta_solver::AlphaBetaSolver, bitboard_solver::BitBoardSolver, center_columns_solver::CenterColumnsSolver, negamax_solver::NegamaxSolver, transposition_table_solver::TranspositionTableSolver
+    }, transposition_table::TranspositionTable,
 };
 
 mod positions;
 mod solvers;
+mod transposition_table;
+
+const TRANSPOSITION_TABLE_SIZE:usize = 8 * 1024 * 1024;
 
 fn select_board_and_solver(encoded_position: &str) -> Box<dyn Solver> {
     let mut solver_arg: Option<String> = None;
@@ -24,6 +27,8 @@ fn select_board_and_solver(encoded_position: &str) -> Box<dyn Solver> {
         }
     }
 
+    let table = TranspositionTable::new(TRANSPOSITION_TABLE_SIZE);
+
     let mut array_position = ArrayPosition::new();
     load_starting_position(encoded_position, &mut array_position);
     let mut bit_position = BitPosition::new();
@@ -37,6 +42,8 @@ fn select_board_and_solver(encoded_position: &str) -> Box<dyn Solver> {
         Some("strong-center-columns") => Box::new(CenterColumnsSolver::new(array_position, MIN_SCORE, MAX_SCORE)),
         Some("weak-bitboard") => Box::new(BitBoardSolver::new(bit_position,-1, 1)),
         Some("strong-bitboard") => Box::new(BitBoardSolver::new(bit_position, MIN_SCORE, MAX_SCORE)),
+        Some("weak-transposition-table") => Box::new(TranspositionTableSolver::new(bit_position,-1, 1, table)),
+        Some("strong-transposition-table") => Box::new(TranspositionTableSolver::new(bit_position, MIN_SCORE, MAX_SCORE, table)),
         Some(other) => panic!("Unknown solver: {}", other),
         None => panic!("Missing --solver argument"),
     };
