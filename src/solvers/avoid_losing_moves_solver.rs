@@ -114,7 +114,7 @@ impl Solver for AvoidLosingMovesSolver {
             }
             let score = self.negamax(median, median + 1);
             if score <= median {
-                right = median;
+                right = score;
             } else {
                 left = score;
             }

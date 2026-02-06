@@ -121,7 +121,7 @@ impl Solver for MoveScoreSolver {
             }
             let score = self.negamax(median, median + 1);
             if score <= median {
-                right = median;
+                right = score;
             } else {
                 left = score;
             }
