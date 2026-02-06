@@ -20,7 +20,7 @@ mod positions;
 mod solvers;
 mod transposition_table;
 
-const TRANSPOSITION_TABLE_SIZE: usize = 8 * 1024 * 1024;
+const TRANSPOSITION_TABLE_SIZE: usize = 8388593;
 
 fn select_board_and_solver(encoded_position: &str) -> Box<dyn Solver> {
     let mut solver_arg: Option<String> = None;
