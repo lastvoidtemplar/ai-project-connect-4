@@ -59,3 +59,33 @@ strong solver - alpha beta pruning negamax with bitboard and center columns heur
 ```bash
 python3 scripts/benchmark/benchmark.py --dir ./data --out result_strong_transposition_table.csv --timeout 10 -- ./target/release/project --solver strong-transposition-table
 ```
+
+weak solver - iterative deepening negamax with bitboard and center columns heuristic and transposition table with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_weak_iterative_deepening.csv --timeout 10 -- ./target/release/project --solver weak-iterarive-deepening
+```
+
+strong solver - iterative deepening negamax with bitboard and center columns heuristic and transposition table with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_strong_iterative_deepening.csv --timeout 10 -- ./target/release/project --solver strong-iterative-deepening
+```
+
+weak solver - iterative deepening negamax with advance bitboard and center columns heuristic and transposition table with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_weak_avoid_losing_moves.csv --timeout 10 -- ./target/release/project --solver weak-avoid-losing-moves
+```
+
+strong solver - iterative deepening negamax with advance bitboard and center columns heuristic and transposition table with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_strong_avoid_losing_moves.csv --timeout 10 -- ./target/release/project --solver strong-avoid-losing-moves
+```
+
+weak solver - iterative deepening negamax with advance bitboard and move score heuristic and transposition table with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_weak_move_score.csv --timeout 10 -- ./target/release/project --solver weak-move-score
+```
+
+strong solver - iterative deepening negamax with advance bitboard and move score heuristic and transposition table with 10 seconds for each case
+```bash
+python3 scripts/benchmark/benchmark.py --dir ./data --out result_strong_move_score.csv --timeout 10 -- ./target/release/project --solver strong-move-score
+```
