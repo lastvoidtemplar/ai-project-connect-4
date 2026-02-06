@@ -78,6 +78,11 @@ impl Solver for IterativeDeepeningSolver {
     fn solve(&mut self) -> i32 {
         self.explored_nodes = 0;
         
+        if self.alpha != -1 && self.beta != 1 {
+            self.alpha =  -((WIDTH * HEIGHT - self.position.played_moves()) as i32) / 2;
+            self.beta =  (WIDTH * HEIGHT - self.position.played_moves() + 1) as i32 / 2;
+        }
+
         let mut left = self.alpha;
         let mut right = self.beta;
 

@@ -109,6 +109,11 @@ impl Solver for MoveScoreSolver {
             return (WIDTH * HEIGHT - self.position.played_moves() + 1) as i32 / 2;
         }
 
+        if self.alpha != -1 && self.beta != 1 {
+            self.alpha =  -((WIDTH * HEIGHT - self.position.played_moves()) as i32) / 2;
+            self.beta =  (WIDTH * HEIGHT - self.position.played_moves() + 1) as i32 / 2;
+        }
+
         let mut left = self.alpha;
         let mut right = self.beta;
 
